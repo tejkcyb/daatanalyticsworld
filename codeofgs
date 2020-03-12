@@ -1,0 +1,20 @@
+from selenium import webdriver
+from getpass import getpass
+
+
+driver = webdriver.Firefox()
+driver.get('https://scholar.google.com/citations?user=-q0DyrwAAAAJ')
+
+login_btn = driver.find_element_by_css_selector('button#gsc_bpf_more.gs_btnPD.gs_in_ib.gs_btn_flat.gs_btn_lrge.gs_btn_lsu')
+login_btn.click()
+r=driver.page_source
+soup = BeautifulSoup(r, 'html.parser')  
+results = soup.find_all('td', attrs={'class':'gsc_a_t'})
+print(len(results))
+record=[]
+for i in range(len(results)):
+  journal=results[i].find_all('div')[1].text[0:]
+  if len(results[i].find_all('span'))>0:
+      year=results[i].find_all('span')[-1].text[2:]
+  record.append((journal,year))
+record
